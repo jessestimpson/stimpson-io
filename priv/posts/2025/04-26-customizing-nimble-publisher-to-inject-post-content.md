@@ -1,0 +1,21 @@
+%{
+  title: "Customizing NimblePublisher to inject post content",
+  author: "Jesse Stimpson",
+  tags: ~w(meta),
+  description: "I use NimblePublisher to build this site -- it's easy to extend and customize.",
+  published: true
+}
+---
+
+Hello, this is my first post on the blog, and I'm excited to talk at you!
+
+I highly value having control over the technology I use, so I was pleased to find that the [Dashbit blog](https://dashbit.co/blog/welcome-to-our-blog-how-it-was-made) was built in a clever way with Elixir Phoenix, and they published the technique in a library called [NimblePublisher](https://github.com/dashbitco/nimble_publisher). I started building my own site with it, and found that it was very fun to work with.
+
+Specifically, it's very easy to extend the parser with custom behavior. I expect that my future posts will have Erlang and Elixir code blocks, so I figured it would be useful to have the option to pull some of that content from real project files into my Mardown blog post at compile time. Doing so means I can create tests for the code that I include in the blog posts.
+
+So, as a bit of a meta exercise, below is the entirety of my PostParser that is pulled into this blog post at compile time. Code blocks in other posts will have excerpts from files, allowing me to interject with prose in between code blocks.
+
+Every time I deploy the blog, this content will automatically be updated to the latest version of PostParser. At the time of writing this in Spring 2025, the code works but it's pretty ugly. Hopefully you're reading this in the far future, where I'm sure the code has evolved into a thing of utter genius and beauty.
+
+```elixir-%{:file=>"lib/stimpson/blog/post_parser.ex"}
+```

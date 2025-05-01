@@ -1,0 +1,17 @@
+<.link href={~p"/blog"}>← All posts</.link>
+
+<article class="prose lg:prose-xl">
+  <h1>{@post.title}</h1>
+
+  <p>
+    <time>{Cldr.Date.to_string!(@post.date)}</time> by {@post.author}
+  </p>
+
+  <p>
+  <%= for tag <- @post.tags do %>
+    <.badge>{tag}</.badge>
+  <% end %>
+  </p>
+
+  {raw(@post.body)}
+</article>

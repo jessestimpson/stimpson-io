@@ -1,0 +1,23 @@
+<.link href={~p"/projects"}>← All projects</.link>
+
+<div class="flex justify-center md:justify-start space-x-6">
+  <.github :if={@project.github} href={@project.github} />
+  <.hexpm :if={@project.hexpm} href={@project.hexpm} />
+  <.hexdocs :if={@project.hexdocs} href={@project.hexdocs} />
+  <.anchor_logo
+    :if={@project.link}
+    name={@project.title}
+    href={@project.link.href}
+    src={@project.logo}
+  />
+</div>
+
+<article class="prose lg:prose-xl">
+  <h1>{@project.title}</h1>
+
+  <p>
+    Tagged as {Enum.join(@project.tags, ", ")}
+  </p>
+
+  {raw(@project.body)}
+</article>

@@ -1,0 +1,12 @@
+<h1>Projects</h1>
+
+<%= for project <- @projects do %>
+  <.article
+    title={project.title}
+    img={project.img}
+    href={~p"/projects/#{project.id}"}
+    badges={project.tags}
+  >
+    {project.description}
+  </.article>
+<% end %>

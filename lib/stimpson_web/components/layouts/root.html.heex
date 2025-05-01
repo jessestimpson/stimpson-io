@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <meta name="description" content="Jesse Stimpson's personal website and blog" />
+    <meta name="author" content="Jesse Stimpson" />
+    <.live_title default="Jesse Stimpson" suffix=" | stimpson.io">
+      {assigns[:page_title]}
+    </.live_title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+  </head>
+  <body class="h-full bg-gray-50 font-sans text-gray-900 antialiased">
+    <div class="min-h-full flex flex-col">
+      <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center h-16">
+            <div class="flex-shrink-0">
+              <a
+                href="/"
+                class="text-2xl font-bold text-indigo-600 hover:text-indigo-800 transition duration-150"
+              >
+                js
+              </a>
+            </div>
+            <nav class="flex space-x-8">
+              <a
+                href="/"
+                class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition duration-150"
+              >
+                Home
+              </a>
+              <a
+                href="/blog"
+                class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition duration-150"
+              >
+                Blog
+              </a>
+              <a
+                href="/about"
+                class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition duration-150"
+              >
+                About
+              </a>
+              <a
+                href="/contact"
+                class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition duration-150"
+              >
+                Contact
+              </a>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-grow">
+        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          {@inner_content}
+        </div>
+      </main>
+
+      <footer class="bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div class="md:flex md:items-center md:justify-between">
+            <div class="flex justify-center md:justify-start space-x-6">
+              <.github href="https://github.com/jessestimpson" />
+              <.linkedin href="https://linkedin.com/in/jessestimpson" />
+            </div>
+            <div class="mt-8 md:mt-0">
+              <p class="text-center md:text-right text-base text-gray-400">
+                &copy; {DateTime.utc_now().year} Jesse Stimpson. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

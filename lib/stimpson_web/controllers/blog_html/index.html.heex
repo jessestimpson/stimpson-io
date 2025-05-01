@@ -1,0 +1,13 @@
+<h1>Posts</h1>
+
+<%= for post <- @posts do %>
+  <.article
+    title={post.title}
+    date={post.date}
+    img="https://via.placeholder.com/640x360.png?text=Article+Image"
+    href={~p"/blog/#{post.id}"}
+    badges={post.tags}
+  >
+    {post.description}
+  </.article>
+<% end %>
