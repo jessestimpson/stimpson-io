@@ -3,11 +3,17 @@ defmodule StimpsonWeb.BlogController do
 
   alias Stimpson.Blog
 
+  @page_title "Make Sure"
+
   def index(conn, _params) do
-    render(conn, "index.html", layout: false, posts: Blog.published_posts())
+    conn
+    |> assign(:page_title, @page_title)
+    |> render("index.html", layout: false, posts: Blog.published_posts())
   end
 
   def show(conn, %{"id" => id}) do
-    render(conn, "show.html", layout: false, post: Blog.get_post_by_id!(id))
+    conn
+    |> assign(:page_title, @page_title)
+    |> render("show.html", layout: false, post: Blog.get_post_by_id!(id))
   end
 end

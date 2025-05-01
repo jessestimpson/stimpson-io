@@ -20,7 +20,7 @@
   <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold text-gray-900">Latest Articles</h2>
-      <a href="/blog" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+      <a href="/makesure" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
         View all articles →
       </a>
     </div>
@@ -30,7 +30,7 @@
           title={post.title}
           date={post.date}
           img="https://via.placeholder.com/640x360.png?text=Article+Image"
-          href={~p"/blog/#{post.id}"}
+          href={~p"/makesure/#{post.id}"}
           badges={post.tags}
         >
           {post.description}
@@ -54,8 +54,7 @@
         <p class="text-base text-gray-600 mb-4">
           @todo: Write an introduction about myself.
         </p>
-        <p class="text-base text-gray-600 mb-6">
-        </p>
+        <p class="text-base text-gray-600 mb-6"></p>
         <a
           href="/about"
           class="inline-flex items-center justify-center px-5 py-2 border border-gray-300 text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-gray-50"

@@ -17,10 +17,11 @@ defmodule StimpsonWeb.Router do
   scope "/", StimpsonWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", PageController, :default
+    get "/home", PageController, :home
 
-    get "/blog", BlogController, :index
-    get "/blog/:id", BlogController, :show
+    get "/makesure", BlogController, :index
+    get "/makesure/:id", BlogController, :show
 
     get "/projects", PortfolioController, :index
     get "/projects/:id", PortfolioController, :show

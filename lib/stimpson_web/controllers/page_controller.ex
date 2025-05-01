@@ -10,4 +10,8 @@ defmodule StimpsonWeb.PageController do
       latest_articles: Blog.recent_posts(3)
     )
   end
+
+  def default(conn, _params) do
+    redirect(conn, to: ~p"/makesure")
+  end
 end

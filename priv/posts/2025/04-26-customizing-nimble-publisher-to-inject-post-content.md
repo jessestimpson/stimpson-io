@@ -19,3 +19,10 @@ Every time I deploy the blog, this content will automatically be updated to the 
 
 ```elixir-%{:file=>"lib/stimpson/blog/post_parser.ex"}
 ```
+
+## Prior Art
+
+- [dashbit.co | Welcome to our blog: how it was made!](https://dashbit.co/blog/welcome-to-our-blog-how-it-was-made)
+- [elixirschool.com | Lessons | NimblePublisher](https://elixirschool.com/en/lessons/misc/nimble_publisher)
+- [bernheisel.com | Moving the blog to Elixir and Phoenix LiveView](https://bernheisel.com/blog/moving-blog)
+- [danschultzer.com | Welcome to my blog](https://danschultzer.com/posts/welcome-to-my-blog)

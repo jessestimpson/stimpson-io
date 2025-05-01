@@ -1,4 +1,4 @@
-<.link href={~p"/blog"}>← All posts</.link>
+<.link href={~p"/makesure"}>← All posts</.link>
 
 <article class="prose lg:prose-xl">
   <h1>{@post.title}</h1>
@@ -8,9 +8,9 @@
   </p>
 
   <p>
-  <%= for tag <- @post.tags do %>
-    <.badge>{tag}</.badge>
-  <% end %>
+    <%= for tag <- @post.tags do %>
+      <.badge>{tag}</.badge>
+    <% end %>
   </p>
 
   {raw(@post.body)}
