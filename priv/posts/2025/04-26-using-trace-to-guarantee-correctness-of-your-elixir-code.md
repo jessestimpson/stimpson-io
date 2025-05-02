@@ -1,5 +1,5 @@
 %{
-  title: "Using :trace to guarantee correctness of your Elixir code",
+  title: "Use BEAM tracing to guarantee correctness of your Elixir code",
   author: "Jesse Stimpson",
   tags: ~w(testing performance ecto),
   description: "We discuss how to and why would you check implementation details in integration tests.",

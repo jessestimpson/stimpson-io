@@ -29,7 +29,7 @@
         <.article
           title={post.title}
           date={post.date}
-          img="https://via.placeholder.com/640x360.png?text=Article+Image"
+          img={~p"/images/posts/#{post.thumbnail_image.year}/#{post.thumbnail_image.basename}"}
           href={~p"/makesure/#{post.id}"}
           badges={post.tags}
         >

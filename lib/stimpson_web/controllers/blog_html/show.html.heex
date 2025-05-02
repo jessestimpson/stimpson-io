@@ -1,10 +1,14 @@
 <.link href={~p"/makesure"}>← All posts</.link>
 
 <article class="prose lg:prose-xl">
+  <img
+    src={~p"/images/posts/#{@post.thumbnail_image.year}/#{@post.thumbnail_image.basename}"}
+    alt="Open Graph Image"
+  />
   <h1>{@post.title}</h1>
 
-  <p>
-    <time>{Cldr.Date.to_string!(@post.date)}</time> by {@post.author}
+  <p class="text-right">
+    <time>{Cldr.Date.to_string!(@post.date)}</time>
   </p>
 
   <p>

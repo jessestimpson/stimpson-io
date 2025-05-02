@@ -54,7 +54,9 @@ defmodule Stimpson.MixProject do
       {:nimble_publisher, "~> 0.1.1"},
       {:makeup_elixir, ">= 0.0.0"},
       {:makeup_erlang, ">= 0.0.0"},
-      {:ex_cldr_dates_times, "~> 2.0"}
+      {:ex_cldr_dates_times, "~> 2.0"},
+      {:image, "~> 0.59"},
+      {:colorex, "~> 1.0.0"}
     ]
   end
 
