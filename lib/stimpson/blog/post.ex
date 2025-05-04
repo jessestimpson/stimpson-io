@@ -131,7 +131,7 @@ defmodule Stimpson.Blog.Post do
     Image.write!(image, filename)
   end
 
-  def gen_colors(state, 2 = num) do
+  def gen_colors(state, 2 = _num) do
     {base_clr, state} = gen_color(state)
 
     next_clr =
