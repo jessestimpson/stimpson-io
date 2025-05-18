@@ -20,7 +20,7 @@ defmodule Stimpson.Blog.PostParser do
 
     if body != body_2 do
       body_2 <>
-        "\nSee a problem with the code in this post? [Please submit an issue on GitHub](https://github.com/jessestimpson/stimpson-io/issues/new?title=Question+about+#{id})\n"
+        "\n---\nSee a problem with the code in this post? [Please submit an issue on GitHub](https://github.com/jessestimpson/stimpson-io/issues/new?title=Question+about+#{id})\n"
     else
       body
     end
