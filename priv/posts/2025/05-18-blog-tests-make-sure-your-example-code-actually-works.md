@@ -3,7 +3,8 @@
   author: "Jesse Stimpson",
   tags: ~w(meta),
   description: "I use NimblePublisher to build this site -- it's easy to extend and customize.",
-  published: true
+  published: true,
+  seed: 4
 }
 ---
 

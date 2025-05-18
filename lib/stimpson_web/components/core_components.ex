@@ -707,12 +707,13 @@ defmodule StimpsonWeb.CoreComponents do
   end
 
   slot :inner_block
+
   def badge(assigns) do
-      ~H"""
-      <span class="rounded-full px-2 py-1 text-xs font-medium bg-indigo-50 text-indigo-700">
+    ~H"""
+    <span class="rounded-full px-2 py-1 text-xs font-medium bg-indigo-50 text-indigo-700">
       {render_slot(@inner_block)}
-      </span>
-      """
+    </span>
+    """
   end
 
   attr :badges, :list, required: true
@@ -726,7 +727,9 @@ defmodule StimpsonWeb.CoreComponents do
     ~H"""
     <div class="flex flex-col sm:flex-row gap-6 pb-6 border-b border-gray-100">
       <div class="sm:w-48 shrink-0">
-        <img src={@img} alt="Article thumbnail" class="w-full h-32 object-cover rounded-md" />
+        <a href={@href}>
+          <img src={@img} alt="Article thumbnail" class="w-full h-32 object-cover rounded-md" />
+        </a>
       </div>
       <div>
         <div class="flex items-center gap-x-4 text-xs mb-2">

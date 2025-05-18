@@ -1,5 +1,5 @@
 defmodule Stimpson.Blog.Post do
-  @enforce_keys [:id, :author, :title, :body, :description, :tags, :date, :published]
+  @enforce_keys [:id, :author, :title, :body, :description, :tags, :date, :published, :seed]
   defstruct [
     :id,
     :author,
@@ -10,7 +10,8 @@ defmodule Stimpson.Blog.Post do
     :date,
     :published,
     :og_image,
-    :thumbnail_image
+    :thumbnail_image,
+    :seed
   ]
 
   def build(filename, attrs, body) do
@@ -59,7 +60,7 @@ defmodule Stimpson.Blog.Post do
   end
 
   defp post_to_seed(post) do
-    hash = :erlang.phash2({post.title})
+    hash = :erlang.phash2({post.seed})
     seed = {hash, hash, hash}
     :rand.seed_s(:exsss, seed)
   end

@@ -3,15 +3,18 @@
   author: "Jesse Stimpson",
   tags: ~w(testing performance ecto),
   description: "Allowing ExUnit to inspect your implementation can cover some otherwise hard-to-test API contracts",
-  published: true
+  published: true,
+  seed: 11
 }
 ---
 
 You already have a stellar test suite that lets you refactor without changing behavior -- but are you sure it doesn't change the performance? By using the Erlang `:trace` module with ExUnit, we can lift some select implementation details into the test suite. And we're not going to use stubs, mocks, or benchmarks.
 
-Proceed with healthy skepticism -- we're breaking some basic rules of testing here. Usually you don't want your test suite to make assertions on implementation details. Your tests can become fragile, your abstractions leaky. But there are cases where such details are actually part of the API contract itself, either implicitly or explicitly. For example, your library may use a costly low-level operation, and efficient use of that operation may be important to the user.
+Proceed with healthy skepticism -- we're breaking some basic rules of testing here. In general you don't want your test suite to make assertions on implementation details. Your tests can become fragile, your abstractions leaky. But there are cases where such details are actually part of the API contract itself, either implicitly or explicitly. For example, your library may use a costly low-level operation, and efficient use of that operation may be important to the user.
 
 We'll explore this idea by writing a simple write-once cache on top of a potentially expensive low-level API, `:persistent_term.put/2`, and an ExUnit test that verifies proper usage of that function using `:trace`.
+
+## The Erlang trace module
 
 [`:trace`](https://www.erlang.org/doc/apps/kernel/trace.html) is a module included with the Erlang kernel, so there are no dependencies to install. The Erlang docs introduce it best:
 
@@ -76,11 +79,13 @@ Finished in 0.03 seconds (0.00s async, 0.03s sync)
 2 tests, 0 failures
 ```
 
+With this test in our project, we can now be sure that the cache behavior is working as expected. The cache implementation is free to become more sophisticated, but we are comfortable that `:persistent_term.put/2` is only called when strictly necessary because we've asserted it in our tests.
+
 ## Taking this to a real project
 
-When you implement this idea in your project, here are some things to consider. Let the Erlang [trace docs](https://www.erlang.org/doc/apps/kernel/trace.html) be your guide!
+When you implement this idea in your project, you'll probably want to make use of some of the other features of `:trace`. Let the [Erlang docs](https://www.erlang.org/doc/apps/kernel/trace.html) be your guide! We'll discuss a few items I find notable, and then we'll showcase this idea in a real project.
 
-### Additional args on `:trace.function/4`
+### 1. Additional args on `:trace.function/4`
 
 Use wildcards to capture function calls that match a specific pattern. For example, to capture all calls to the `:persistent_term` module instead of just `put/2`, you can use the following pattern:
 
@@ -90,7 +95,7 @@ Use wildcards to capture function calls that match a specific pattern. For examp
 
 You can also provide a match spec to enable gathering of additional data.
 
-### Capturing the caller module, and other metadata
+### 2. Capturing the caller module, and other metadata
 
 Depending on the arguments you provide when creating the trace, the message passed to your listening process will contain additional information about the function call. You can use this information to filter or aggregate the data, or enhance your assertions.
 
@@ -100,17 +105,17 @@ For example, perhaps you want to trace at the boundary between 2 modules. You ca
 match_spec = [{:_, [], [{:message, {{:cp, {:caller}}}}]}]
 ```
 
-### Harness Ergonmics
+### 3. Harness Ergonmics
 
 There are several improvements to the test harness that can be made in a real project. For instance:
 
-1. Genericizing `calls_put?/1`, and `tracer/1` to support several different types of assertions
-2. Using GenServer instead of spawn_link for OTP goodness
-3. Packaging it all together into a module with an API contract of its own
+* Genericizing `calls_put?/1`, and `tracer/1` to support several different types of assertions
+* Using GenServer instead of spawn_link for OTP goodness
+* Packaging it all together into a module with an API contract of its own
 
 ### A real world example, in detail
 
-If you're interested in concrete example code, we use this technique in [EctoFoundationDB's integration tests](https://github.com/foundationdb-beam/ecto_foundationdb/blob/main/test/ecto/integration/fdb_api_counting_test.exs). EctoFoundationDB is a data management layer written on top of FoundationDB, a key-value store with strictly serializable arbirtary transactions. With this functionality our Ecto Layer can do some things typical in an RDBMS, like data indexes. However, we must provide test coverage to ensure correctness.
+If you're interested in concrete example code, we use this technique in [EctoFoundationDB's integration tests](https://github.com/foundationdb-beam/ecto_foundationdb/blob/main/test/ecto/integration/fdb_api_counting_test.exs). EctoFoundationDB is a data management layer written on top of FoundationDB, a key-value store with strictly serializable arbirtary transactions, which allows us to do some things in a key-value store that are typical in an RDBMS, like data indexes.
 
 In our integration tests, we ensure that (i) the data layer does not suffer from write amplification and that (ii) metadata caching works as expected. Function call tracing has been extremely helpful as we've gone through several refactors.
 
@@ -156,7 +161,7 @@ assert [
 
 ## Conclusion
 
-Remember that simply unit testing the inputs and outputs of a pure function is the gold standard. You should only resort to other techniques when you have no other options. Once you identify an important low-level operation that is implicitly part of your API contract, give the `:trace` module a try. Used sparingly, it can be a powerful tool to make your application more robust, and will serve you well especially during refactoring sessions.
+Remember that simply unit testing the inputs and outputs of a pure function is the gold standard. You should only resort to other techniques when you have no other options. Once you identify an important low-level operation that is implicitly part of your API contract, give the `:trace` module a try. Used sparingly, it can be a powerful tool to make your application more robust, and will serve you well especially during a refactor.
 
 ## Appendix - alternative approaches
 

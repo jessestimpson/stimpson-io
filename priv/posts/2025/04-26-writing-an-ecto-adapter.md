@@ -3,7 +3,8 @@
   author: "Jesse Stimpson",
   tags: ~w(hello),
   description: "We explore how to write a new Ecto adapter from scratch.",
-  published: true
+  published: false,
+  seed: 2929
 }
 ---
 

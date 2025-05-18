@@ -13,9 +13,5 @@
   published: true
 }
 ---
-Lorem ipsum blah blah blah
 
-```elixir
-defmodule Hi do
-end
-```
+LiveSecret is a web app that allows 2 people to remotely and securely share some secret information.
