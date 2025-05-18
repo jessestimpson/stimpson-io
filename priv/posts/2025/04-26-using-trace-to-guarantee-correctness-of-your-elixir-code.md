@@ -1,15 +1,15 @@
 %{
-  title: "Use BEAM tracing to guarantee correctness of your Elixir code",
+  title: "Break the rules - test your implementation details",
   author: "Jesse Stimpson",
   tags: ~w(testing performance ecto),
-  description: "We discuss how to and why would you check implementation details in integration tests.",
+  description: "Allowing ExUnit to inspect your implementation can cover some otherwise hard-to-test API contracts",
   published: true
 }
 ---
 
 You already have a stellar test suite that lets you refactor without changing behavior -- but are you sure it doesn't change the performance? By using the Erlang `:trace` module with ExUnit, we can lift some select implementation details into the test suite. And we're not going to use stubs, mocks, or benchmarks.
 
-Proceed with healthy skepticism -- it's unusual for a test suite to make assertions on implementation details that aren't otherwise exposed by the API contract. Your tests can become fragile, your abstractions leaky. But there are cases where such details are actually part of the contract itself, either implicitly or explicitly. Usually these come up when there is a significant cost to an underlying operation, and your app must make sure it uses that operation efficiently.
+Proceed with healthy skepticism -- we're breaking some basic rules of testing here. Usually you don't want your test suite to make assertions on implementation details. Your tests can become fragile, your abstractions leaky. But there are cases where such details are actually part of the API contract itself, either implicitly or explicitly. For example, your library may use a costly low-level operation, and efficient use of that operation may be important to the user.
 
 We'll explore this idea by writing a simple write-once cache on top of a potentially expensive low-level API, `:persistent_term.put/2`, and an ExUnit test that verifies proper usage of that function using `:trace`.
 
@@ -25,7 +25,7 @@ Usage of `:trace` will look like:
 3. Receive the trace messages
 4. Destroy the trace session
 
-First, our library will consist of some simple code that uses `:persistent_term` to cache a global value in memory. We know that `:persistent_term` has several [Best Practices](https://www.erlang.org/doc/apps/erts/persistent_term.html#module-best-practices-for-using-persistent-terms) to use it effectively. For this post, we will assert that our code only calls `:persistent_term.put/2` in precisely the expected code path. Otherwise our app risks expensive garbage collections.
+Let's start our example library with some simple code that uses `:persistent_term` to cache a global value in memory. We know that `:persistent_term` has several [Best Practices](https://www.erlang.org/doc/apps/erts/persistent_term.html#module-best-practices-for-using-persistent-terms) to use it effectively. For this post, we will assert that our code only calls `:persistent_term.put/2` in precisely the expected code path. Otherwise our app risks expensive garbage collections.
 
 ```elixir-%{:file=>"lib/post_content/toy_cache.ex"}
 defmodule ToyLibrary do
@@ -96,6 +96,10 @@ Depending on the arguments you provide when creating the trace, the message pass
 
 For example, perhaps you want to trace at the boundary between 2 modules. You can capture the caller module for each trace and then filter by it in the listening process. More on this below.
 
+```elixir
+match_spec = [{:_, [], [{:message, {{:cp, {:caller}}}}]}]
+```
+
 ### Harness Ergonmics
 
 There are several improvements to the test harness that can be made in a real project. For instance:
@@ -122,6 +126,20 @@ We've chosen to make assertions on the **caller** of the underlying `:erlfdb` mo
     {:ok, _} = TestRepo.update(changeset)
   end)
 
+# Trace messages are captured in the form:
+#
+# [
+#   {CallerModule, :fdb_operation},
+#   ...
+# ]
+#
+# where
+#
+#     defmodule CallerModule do
+#       def foo(x), do: :erlfdb.fdb_operation(x, "bar")
+#     end
+#
+
 assert [
          # we always get global metadataVersion
          {EctoFoundationDB.Layer.MetadataVersion, :get},
@@ -136,7 +154,13 @@ assert [
        ] == calls
 ```
 
-## Alternatives
+## Conclusion
+
+Remember that simply unit testing the inputs and outputs of a pure function is the gold standard. You should only resort to other techniques when you have no other options. Once you identify an important low-level operation that is implicitly part of your API contract, give the `:trace` module a try. Used sparingly, it can be a powerful tool to make your application more robust, and will serve you well especially during refactoring sessions.
+
+## Appendix - alternative approaches
+
+For completeness, here are some other approaches to verification of implementation details.
 
 ### Functional core, imperative shell
 
@@ -163,7 +187,3 @@ Benchmarking is a powerful tool for measuring the performance of your code, but 
 Lastly, if your timing thresholds are not set correctly, you may fail to detect some performance issues. On the other hand, benchmarking will catch some issues that tracing will not. For example, algorithmic changes that use the same functions but take much longer.
 
 Using function call tracing is not a replacement for benchmarking, but it can be a useful way for your integration tests to maintain specific guarantees on the performance of your code. Your benchmarks can focus on **pitching your application** rather than testing it.
-
-## Conclusion
-
-Remember that simply unit testing the inputs and outputs of a pure function is the gold standard. You should only resort to other techniques when you have no other options. Once you identify an important low-level operation that is implicitly part of your API contract, give the `:trace` module a try. Used sparingly, it can be a powerful tool to make your application more robust, and will serve you well especially during refactoring sessions.

@@ -79,6 +79,7 @@ defmodule Stimpson.Blog.PostParser do
     # #{file}:#{inspect(lines)}
     #{content |> String.trim_trailing()}
     ```
+    #{ref("#{file}:#{inspect(lines)}", url(file, lines))}
     """
   end
 
@@ -88,6 +89,19 @@ defmodule Stimpson.Blog.PostParser do
     # #{file}
     #{File.read!(file) |> String.trim_trailing()}
     ```
+    #{ref(file, url(file))}
     """
+  end
+
+  defp ref(text, url) do
+    "<div style=\"text-align: right\"><small>ref: <a href=\"#{url}\">#{text}</a></small></div>"
+  end
+
+  defp url(file) do
+    "https://github.com/jessestimpson/stimpson-io/blob/main/#{file}"
+  end
+
+  defp url(file, %Range{first: first, last: last}) do
+    "https://github.com/jessestimpson/stimpson-io/blob/main/#{file}#L#{first}..L#{last}"
   end
 end
